@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{AB8D3AD8-D462-42BC-B987-E3A603E1873D}</ProjectGuid>
-    <RootNamespace>KickoffPlugin</RootNamespace>
+    <ProjectGuid>{2EC8483B-F9D3-4CF1-9130-23AA7BDC608E}</ProjectGuid>
+    <RootNamespace>RedirectPlugin</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -90,13 +90,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Chris\Documents\bakkesmod\bakkesmodsdk\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>IS_PLUGIN;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Chris\Documents\bakkesmod\bakkesmodsdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>IS_PLUGIN;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\Chris\Documents\bakkesmod\bakkesmodsdk\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Chris\Documents\bakkesmod\bakkesmodsdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -113,10 +113,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="KickoffPlugin.h" />
+    <ClInclude Include="RedirectPlugin.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KickoffPlugin.cpp" />
+    <ClCompile Include="RedirectPlugin.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

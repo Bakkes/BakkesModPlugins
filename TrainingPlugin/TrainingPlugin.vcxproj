@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{AB8D3AD8-D462-42BC-B987-E3A603E1873D}</ProjectGuid>
-    <RootNamespace>KickoffPlugin</RootNamespace>
+    <ProjectGuid>{75B3BE26-A16E-4674-B7A6-A0C0FFA9D79B}</ProjectGuid>
+    <RootNamespace>TrainingPlugin</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -90,7 +90,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Chris\Documents\bakkesmod\bakkesmodsdk\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Chris\Documents\bakkesmod\bakkesmodsdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>IS_PLUGIN;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -113,10 +113,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="KickoffPlugin.h" />
+    <ClCompile Include="cvareval.cpp" />
+    <ClCompile Include="jsonshot.cpp" />
+    <ClCompile Include="trainingplugin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KickoffPlugin.cpp" />
+    <ClInclude Include="cvareval.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="jsonshot.h" />
+    <ClInclude Include="trainingplugin.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
