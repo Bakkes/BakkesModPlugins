@@ -1,2 +1,2 @@
 # BakkesModPlugins
-All the BakkesMod plugins I've created so far
+These are plugins made for the game Rocket League, using the BakkeMod SDK, which can be found on http://bakkesmod.com
