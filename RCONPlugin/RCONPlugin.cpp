@@ -10,7 +10,7 @@ using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 
-BAKKESMOD_PLUGIN(RCONPlugin, "RCON plugin", "0.1", 0)
+BAKKESMOD_PLUGIN(RCONPlugin, "RCON plugin", "0.1", -1337)
 
 GameWrapper* gw;
 ConsoleWrapper* cons;
@@ -26,6 +26,7 @@ struct connection_data
 	std::vector<string> listeners;
 };
 std::map<connection_ptr, connection_data> auths;
+typedef std::map<connection_ptr, connection_data >::iterator auth_iter;
 
 bool is_authenticated(connection_ptr hdl) {
 	if (auths.find(hdl) == auths.end()) {
@@ -39,19 +40,34 @@ bool is_authenticated(connection_ptr hdl) {
 
 server ws_server;
 
-void run_server() {
-	try {
-		// Set logging settings
 
 
-		// Start the ASIO io_service run loop
-		ws_server.run();
+string stringify(std::vector<std::string> params) 
+{
+	string str = " \"";
+	for (size_t i = 1; i < params.size(); ++i)
+	{
+		str += params.at(i);
+		if (i != params.size() - 1) {
+			str += " ";
+		}
 	}
-	catch (websocketpp::exception const & e) {
-		std::cout << e.what() << std::endl;
-	}
-	catch (...) {
-		std::cout << "other exception" << std::endl;
+	str += "\"";
+	return str;
+}
+
+void rconplugin_Notifier(std::vector<std::string> params) 
+{
+	string command = params.at(0);
+	if (command.compare("sendback") == 0 && params.size() > 1)
+	{
+		for (auth_iter iterator = auths.begin(); iterator != auths.end(); iterator++)
+		{
+			if (is_authenticated(iterator->first) && iterator->first.get()->get_state() == websocketpp::session::state::open)
+			{
+				iterator->first->send(stringify(params));
+			}
+		}
 	}
 }
 
@@ -80,6 +96,11 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
 			delete input;
 			return;
 		}
+		string payload = msg->get_payload();
+		gw->Execute([payload](GameWrapper* gw) {
+			cons->executeCommand(payload);
+		});
+		
 		delete input;
 	}
 	catch (const websocketpp::lib::error_code& e) {
@@ -89,29 +110,46 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
 }
 
 
+void run_server() {
+	try {
+		// Set logging settings
+		//ws_server.set_access_channels(websocketpp::log::alevel::all);
+		//ws_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
+
+		// Initialize Asio
+		ws_server.init_asio();
+
+		// Register our message handler
+		ws_server.set_message_handler(bind(&on_message, &ws_server, ::_1, ::_2));
+
+		// Listen on port 9002
+		ws_server.listen(9002);
+
+		// Start the server accept loop
+		ws_server.start_accept();
+
+		// Start the ASIO io_service run loop
+		ws_server.run();
+	}
+	catch (websocketpp::exception const & e) {
+		std::cout << e.what() << std::endl;
+	}
+	catch (...) {
+		std::cout << "other exception" << std::endl;
+	}
+}
+
 void RCONPlugin::onLoad()
 {
 	gw = gameWrapper;
 	cons = console;
-
 	cons->registerCvar("rcon_password", "password");
 	cons->registerCvar("rcon_timeout", "5");
+	cons->registerNotifier("sendback", rconplugin_Notifier);
 
-	ws_server.set_access_channels(websocketpp::log::alevel::all);
-	ws_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
-
-	// Initialize Asio
-	ws_server.init_asio();
-
-	// Register our message handler
-	ws_server.set_message_handler(bind(&on_message, &ws_server, ::_1, ::_2));
-
-	// Listen on port 9002
-	ws_server.listen(9002);
-
-	// Start the server accept loop
-	ws_server.start_accept();
-	ws_server.run();
+	//thread t(run_server);
+	run_server();
+	//ws_server.run();
 }
 
 void RCONPlugin::onUnload()
