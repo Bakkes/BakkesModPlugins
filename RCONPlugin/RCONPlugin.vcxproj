@@ -19,19 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F6B116D6-D349-4547-8A0A-041F34C46099}</ProjectGuid>
-    <RootNamespace>ReboundPlugin</RootNamespace>
+    <ProjectGuid>{AC6B2D6D-5427-4C2F-9ED8-A8D92AE71591}</ProjectGuid>
+    <RootNamespace>RCONPlugin</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -74,8 +74,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\Chris\Documents\bakkesmod\BakkesMod\BakkesMod;C:\Users\Chris\Downloads\websocketpp-0.7.0\;C:\Users\Chris\Downloads\boost_1_61_0\</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>IS_PLUGIN;_WINDLL;%(PreprocessorDefinitions);_SCL_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\Chris\Documents\bakkesmod\BakkesMod\Debug;C:\Users\Chris\Downloads\boost_1_61_0\stage\lib</AdditionalLibraryDirectories>
+    </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
@@ -94,13 +99,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Chris\Documents\bakkesmod\BakkesMod\BakkesMod</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>IS_PLUGIN;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\Chris\Documents\bakkesmod\BakkesMod\Release;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -117,10 +119,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ReboundPlugin.h" />
+    <ClInclude Include="RCONPlugin.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ReboundPlugin.cpp" />
+    <ClCompile Include="RCONPlugin.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
