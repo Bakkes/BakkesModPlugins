@@ -44,7 +44,7 @@ server ws_server;
 
 string stringify(std::vector<std::string> params) 
 {
-	string str = " \"";
+	string str = "";
 	for (size_t i = 1; i < params.size(); ++i)
 	{
 		str += params.at(i);
@@ -52,7 +52,7 @@ string stringify(std::vector<std::string> params)
 			str += " ";
 		}
 	}
-	str += "\"";
+	str += "";
 	return str;
 }
 
