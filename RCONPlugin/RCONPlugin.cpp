@@ -123,7 +123,9 @@ void run_server() {
 		ws_server.set_message_handler(bind(&on_message, &ws_server, ::_1, ::_2));
 
 		// Listen on port 9002
-		ws_server.listen(9002);
+		string port = cons->getCvarValue("rcon_port", "9002");
+		int p = is_number(port) ? atoi(port.c_str()) : 9002;
+		ws_server.listen(p);
 
 		// Start the server accept loop
 		ws_server.start_accept();
@@ -144,6 +146,7 @@ void RCONPlugin::onLoad()
 	gw = gameWrapper;
 	cons = console;
 	cons->registerCvar("rcon_password", "password");
+	cons->registerCvar("rcon_port", "9002"); //Changing this wont do shit...
 	cons->registerCvar("rcon_timeout", "5");
 	cons->registerNotifier("sendback", rconplugin_Notifier);
 
