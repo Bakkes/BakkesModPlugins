@@ -2,6 +2,7 @@
 #include "cvareval.h"
 #include <math.h>
 JsonShot currentShot;
+bool is_loaded = false;
 BAKKESMOD_PLUGIN(TrainingPlugin, "Training plugin", "0.1.1", 0)
 
 struct shot_data {
@@ -152,7 +153,8 @@ void trainingplugin_ConsoleNotifier(std::vector<std::string> params)
 	}
 	if (command.compare("shot_reset") == 0) 
 	{
-		
+		if (!is_loaded)
+			return;
 		get_shot_data_from_console(&s_data);
 		TutorialWrapper tw = gw->GetGameEventAsTutorial();
 		bool mirror = should_mirror();
@@ -207,9 +209,12 @@ void trainingplugin_ConsoleNotifier(std::vector<std::string> params)
 		string file = params.at(1);
 		currentShot = JsonShot(file);
 		currentShot.init(gw, cons);
+		is_loaded = true;
 	}
 	else if (command.compare("shot_generate") == 0)
 	{
+		if (!is_loaded)
+			return;
 		currentShot.set(gw, cons);
 	}
 }

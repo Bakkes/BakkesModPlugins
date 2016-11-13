@@ -28,7 +28,8 @@ void redirectplugin_ConsoleNotifier(std::vector<std::string> params) {
 		float offset_z = cons->getCvarFloat("redirect_pass_offset_z", 800);
 
 		bool predict = cons->getCvarBool("redirect_pass_predict", true);
-
+		float predictMultiplierX = cons->getCvarFloat("redirect_predict_multiplier_x", 2.0f);
+		float predictMultiplierY = cons->getCvarFloat("redirect_predict_multiplier_y", 2.0f);
 		bool onGround = cons->getCvarBool("redirect_on_ground", false);
 
 		int offsetX = random(0, (int)offset);
@@ -38,7 +39,7 @@ void redirectplugin_ConsoleNotifier(std::vector<std::string> params) {
 
 		Vector velMultiplied;
 		if (predict)
-			velMultiplied = playerVelocity * Vector(2, 2, 1);
+			velMultiplied = playerVelocity * Vector(predictMultiplierX, predictMultiplierY, 1);
 		offsetVec = offsetVec + velMultiplied;
 		Vector shotData = training.GenerateShot(ballPosition, playerPosition + offsetVec, ballSpeed);
 		if (onGround)
@@ -56,6 +57,8 @@ void RedirectPlugin::onLoad()
 	console->registerCvar("redirect_pass_offset_z", "200");
 	console->registerCvar("redirect_pass_predict", "1");
 	console->registerCvar("redirect_on_ground", "0");
+	console->registerCvar("redirect_predict_multiplier_x", "2");
+	console->registerCvar("redirect_predict_multiplier_y", "2");
 	gw = gameWrapper;
 	cons = console;
 	console->registerNotifier("redirect_shoot", redirectplugin_ConsoleNotifier);
