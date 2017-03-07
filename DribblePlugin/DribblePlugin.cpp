@@ -52,4 +52,6 @@ void DribblePlugin::onLoad()
 
 void DribblePlugin::onUnload()
 {
+	console->unregisterNotifier("ballontop", dribblePlugin_onCommand);
+	console->unregisterNotifier("shootatme", dribblePlugin_onCommand);
 }

@@ -65,4 +65,5 @@ void ReboundPlugin::onLoad()
 
 void ReboundPlugin::onUnload()
 {
+	console->unregisterNotifier("rebound_shoot", reboundplugin_ConsoleNotifier);
 }

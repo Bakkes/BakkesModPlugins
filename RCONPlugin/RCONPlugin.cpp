@@ -146,7 +146,7 @@ void RCONPlugin::onLoad()
 	gw = gameWrapper;
 	cons = console;
 	cons->registerCvar("rcon_password", "password");
-	cons->registerCvar("rcon_port", "9002"); //Changing this wont do shit...
+	cons->registerCvar("rcon_port", "9002"); //Registered in the main dll now
 	cons->registerCvar("rcon_timeout", "5");
 	cons->registerNotifier("sendback", rconplugin_Notifier);
 
@@ -158,4 +158,5 @@ void RCONPlugin::onLoad()
 void RCONPlugin::onUnload()
 {
 	ws_server.stop();
+	cons->unregisterNotifier("sendback", rconplugin_Notifier);
 }

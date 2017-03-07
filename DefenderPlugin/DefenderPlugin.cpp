@@ -111,4 +111,6 @@ void DefenderPlugin::onLoad()
 
 void DefenderPlugin::onUnload()
 {
+	console->unregisterNotifier("defender_start", defenderplugin_ConsoleNotifier);
+	console->unregisterNotifier("defender_stop", defenderplugin_ConsoleNotifier);
 }

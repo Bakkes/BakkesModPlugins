@@ -66,4 +66,5 @@ void RedirectPlugin::onLoad()
 
 void RedirectPlugin::onUnload()
 {
+	console->unregisterNotifier("redirect_shoot", redirectplugin_ConsoleNotifier);
 }

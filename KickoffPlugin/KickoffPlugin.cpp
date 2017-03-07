@@ -70,4 +70,5 @@ void KickoffPlugin::onLoad()
 
 void KickoffPlugin::onUnload()
 {
+	cons->unregisterNotifier("kickoff_load", kickoffplugin_ConsoleNotifier);
 }

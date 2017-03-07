@@ -72,9 +72,10 @@ void get_shot_data_from_console(shot_data* data) {
 	b.location.x = to_string(data->ball_location_x);
 	b.location.y = to_string(data->ball_location_y);
 	b.location.z = to_string(data->ball_location_z);
-	data->ball_velocity_x = cons->getCvarFloat("shot_initial_ball_velocity_x", 0.0f);
-	data->ball_velocity_y = cons->getCvarFloat("shot_initial_ball_velocity_y", 0.0f);
-	data->ball_velocity_z = cons->getCvarFloat("shot_initial_ball_velocity_z", 0.0f);
+	float velocityRandomization = cons->getCvarFloat("shot_randomization", 0.0f);
+	data->ball_velocity_x = cons->getCvarFloat("shot_initial_ball_velocity_x", 0.0f) + velocityRandomization;
+	data->ball_velocity_y = cons->getCvarFloat("shot_initial_ball_velocity_y", 0.0f) + velocityRandomization;
+	data->ball_velocity_z = cons->getCvarFloat("shot_initial_ball_velocity_z", 0.0f) + velocityRandomization;
 
 	b.velocity.x = to_string(data->ball_velocity_x);
 	b.velocity.y = to_string(data->ball_velocity_y);
@@ -88,8 +89,10 @@ void get_shot_data_from_console(shot_data* data) {
 	data->player_location_y = get_safe_float(parse(cons->getCvarValue("shot_initial_player_location_y", "0.0"), p, b, s));
 	data->player_location_z = get_safe_float(parse(cons->getCvarValue("shot_initial_player_location_z", "0.0"), p, b, s));
 
+
+
 	data->player_velocity_x = get_safe_float(parse(cons->getCvarValue("shot_initial_player_velocity_x", "0.0"), p, b, s));
-	data->player_velocity_y = get_safe_float(parse(cons->getCvarValue("shot_initial_player_velocity_y", "0.0"), p, b, s));
+	data->player_velocity_y = get_safe_float(parse(cons->getCvarValue("shot_initial_player_velocity_y", "0.0"), p, b, s)) ;
 	data->player_velocity_z = get_safe_float(parse(cons->getCvarValue("shot_initial_player_velocity_z", "0.0"), p, b, s));
 
 	data->player_rotation_pitch = get_safe_int(parse(cons->getCvarValue("shot_initial_player_rotation_pitch", "0.0"), p, b, s));
@@ -134,11 +137,6 @@ bool should_mirror() {
 	return cons->getCvarBool("shot_mirror", false);
 }
 
-#define FREE_PLAY 65306
-#define AERIAL 57531
-#define STRIKER 57532
-#define GOALIE 57533
-
 
 
 shot_data s_data;
@@ -158,7 +156,7 @@ void trainingplugin_ConsoleNotifier(std::vector<std::string> params)
 		get_shot_data_from_console(&s_data);
 		TutorialWrapper tw = gw->GetGameEventAsTutorial();
 		bool mirror = should_mirror();
-		if (tw.IsTraining(FREE_PLAY))
+		if (tw.IsInFreePlay())
 		{
 			float waitTime = cons->getCvarFloat("shot_waitbeforeshot", 0.5f);
 			
@@ -179,7 +177,7 @@ void trainingplugin_ConsoleNotifier(std::vector<std::string> params)
 					return;
 				TutorialWrapper tw = gw->GetGameEventAsTutorial();
 
-				if (tw.IsTraining(FREE_PLAY))
+				if (tw.IsInFreePlay())
 				{
 					
 					bool mirror = should_mirror();
@@ -193,7 +191,7 @@ void trainingplugin_ConsoleNotifier(std::vector<std::string> params)
 
 			}, max(0.0f, waitTime * 1000));
 		}
-		else if (tw.IsTraining(STRIKER) || tw.IsTraining(GOALIE) || tw.IsTraining(AERIAL))
+		else// if (tw.IsTraining(STRIKER) || tw.IsTraining(GOALIE) || tw.IsTraining(AERIAL))
 		{
 			tw.SetCountdownTime(cons->getCvarFloat("shot_countdowntime", 1.0f));
 			tw.SetBallSpawnLocation(mirror_it(s_data.get_ball_start_location(), mirror));
@@ -248,6 +246,8 @@ void TrainingPlugin::onLoad()
 	cons->registerCvar("shot_initial_player_rotation_yaw", "0");
 	cons->registerCvar("shot_initial_player_rotation_roll", "0");
 
+	cons->registerCvar("shot_randomization", "0"); //Shot randomization to velocity, in unreal units
+
 	cons->registerCvar("shot_countdowntime", "1");
 	cons->registerCvar("shot_waitbeforeshot", "0.5");
 	
@@ -261,4 +261,7 @@ void TrainingPlugin::onLoad()
 
 void TrainingPlugin::onUnload()
 {
+	cons->unregisterNotifier("shot_reset", trainingplugin_ConsoleNotifier);
+	cons->unregisterNotifier("shot_load", trainingplugin_ConsoleNotifier);
+	cons->unregisterNotifier("shot_generate", trainingplugin_ConsoleNotifier);
 }
