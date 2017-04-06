@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include <stdio.h>
 
-BAKKESMOD_PLUGIN(WorkshopPlugin, "Workshop plugin", "0.1", 0)
+BAKKESMOD_PLUGIN(WorkshopPlugin, "Workshop plugin", "0.1", PLUGINTYPE_FREEPLAY | PLUGINTYPE_CUSTOM_TRAINING | PLUGINTYPE_REPLAY)
 
 static const string REPLAY_SHOT_DIRECTORY = "./bakkesmod/shots/replay/";
 
@@ -42,10 +42,9 @@ std::string getSafeFileName(std::string folder, std::string baseName) {
 }
 
 string createReplaySnapshot() {
-	GameEventWrapper gew = gw->GetReplayGameEvent();
-	ReplayDirectorWrapper drw = gw->GetReplayDirector();
+	ReplayWrapper gew = gw->GetGameEventAsReplay();
 	BallWrapper b = gew.GetBall();
-	ActorWrapper aw = drw.GetViewTarget();
+	ActorWrapper aw = gew.GetViewTarget();
 	//data needed: ball loc, ball vel, vt loc, vt rotation
 
 	std::ifstream t("./bakkesmod/data/replay_template.json");

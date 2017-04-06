@@ -1,7 +1,7 @@
 #include "redirectplugin.h"
 #include "helpers.h"
 
-BAKKESMOD_PLUGIN(RedirectPlugin, "Redirect plugin", "0.2", 0)
+BAKKESMOD_PLUGIN(RedirectPlugin, "Redirect plugin", "0.2", PLUGINTYPE_FREEPLAY)
 
 
 

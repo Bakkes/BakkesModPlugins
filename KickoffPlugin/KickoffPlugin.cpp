@@ -2,7 +2,7 @@
 
 #include "helpers.h"
 
-BAKKESMOD_PLUGIN(KickoffPlugin, "Kickoff plugin", "0.1", 0)
+BAKKESMOD_PLUGIN(KickoffPlugin, "Kickoff plugin", "0.1", PLUGINTYPE_THREADED | PLUGINTYPE_CUSTOM_TRAINING)
 
 struct kickoff_data {
 	Vector BallLocation;

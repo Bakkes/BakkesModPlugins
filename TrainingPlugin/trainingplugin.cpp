@@ -3,7 +3,7 @@
 #include <math.h>
 JsonShot currentShot;
 bool is_loaded = false;
-BAKKESMOD_PLUGIN(TrainingPlugin, "Training plugin", "0.1.1", 0)
+BAKKESMOD_PLUGIN(TrainingPlugin, "Training plugin", "0.1.1", PLUGINTYPE_FREEPLAY | PLUGINTYPE_CUSTOM_TRAINING)
 
 struct shot_data {
 	float ball_location_x = 0;

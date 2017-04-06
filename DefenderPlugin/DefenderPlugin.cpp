@@ -1,7 +1,7 @@
 #include "DefenderPlugin.h"
 
 #include "helpers.h"
-BAKKESMOD_PLUGIN(DefenderPlugin, "Defender plugin", "0.1", 0)
+BAKKESMOD_PLUGIN(DefenderPlugin, "Defender plugin", "0.1", PLUGINTYPE_FREEPLAY)
 
 GameWrapper* gw;
 ConsoleWrapper* cons;

@@ -3,10 +3,26 @@
 #include "helpers.h"
 #include <math.h>
 
-BAKKESMOD_PLUGIN(ReboundPlugin, "Rebound plugin", "0.1", 0)
+BAKKESMOD_PLUGIN(ReboundPlugin, "Rebound plugin", "0.1", PLUGINTYPE_FREEPLAY)
 
 GameWrapper* gw;
 ConsoleWrapper* cons;
+Vector projectedBounce;
+
+void on_draw(CanvasWrapper cw) {
+	//Vector2 loc = cw.Project(projectedBounce - Vector(100, 0, 100));
+
+	//Vector2 loc2 = cw.Project(projectedBounce + Vector(100, 0, 100));
+	//cw.SetPosition(loc);
+	//
+	//cw.SetColor(255, 0, 0, 255);
+
+	//cw.DrawRect(loc, loc2);
+	//cw.FillBox({ loc2.X - loc.X, loc2.Y - loc.Y });
+	//cw.DrawString(to_string(loc.X) + "," + to_string(loc.Y));
+	//cw.SetPosition({ loc.X, loc.Y + 20 });
+	//cw.DrawString(to_string(projectedBounce.X) + "," + to_string(projectedBounce.Y) + "," + to_string(projectedBounce.Z));
+}
 
 void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 	string command = params.at(0);
@@ -43,10 +59,17 @@ void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 		goalTarget.X += sideOffset;
 
 		float reboundSpeed = cons->getCvarFloat("rebound_shotspeed", 600.0f);
-
+		projectedBounce = goalTarget;
 		Vector shot = tw.GenerateShot(ballLoc, goalTarget, reboundSpeed);
-		tw.GetBall().Stop(); //so theres no spin
+		if (cons->getCvarBool("rebound_resetspin", false)) {
+			tw.GetBall().Stop();
+		}
+		Vector addedSpin = { cons->getCvarFloat("rebound_addedspin", 0.0f),
+			cons->getCvarFloat("rebound_addedspin", 0.0f),
+			cons->getCvarFloat("rebound_addedspin", 0.0f) };
+		//tw.GetBall().Stop(); //so theres no spin, nevermind, we want some spin
 		tw.GetBall().SetVelocity(shot);
+		tw.GetBall().SetAngularVelocity(addedSpin, true);
 	}
 
 }
@@ -57,10 +80,12 @@ void ReboundPlugin::onLoad()
 	console->registerCvar("rebound_addedheight", "(300, 1400)");
 
 	console->registerCvar("rebound_side_offset", "0");
-
+	console->registerCvar("rebound_addedspin", "0");
+	console->registerCvar("rebound_resetspin", "0");
 	gw = gameWrapper;
 	cons = console;
 	console->registerNotifier("rebound_shoot", reboundplugin_ConsoleNotifier);
+	gw->RegisterDrawable(on_draw);
 }
 
 void ReboundPlugin::onUnload()

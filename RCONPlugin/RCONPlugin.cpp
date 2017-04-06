@@ -10,7 +10,7 @@ using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 
-BAKKESMOD_PLUGIN(RCONPlugin, "RCON plugin", "0.1", -1337)
+BAKKESMOD_PLUGIN(RCONPlugin, "RCON plugin", "0.1", PLUGINTYPE_THREADED)
 
 GameWrapper* gw;
 ConsoleWrapper* cons;
@@ -98,7 +98,7 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
 		}
 		string payload = msg->get_payload();
 		gw->Execute([payload](GameWrapper* gw) {
-			cons->executeCommand(payload);
+			cons->executeCommandNoLog(payload);
 		});
 		
 		delete input;

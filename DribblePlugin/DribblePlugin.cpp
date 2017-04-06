@@ -1,7 +1,7 @@
 #include "DribblePlugin.h"
 
 
-BAKKESMOD_PLUGIN(DribblePlugin, "Dribble plugin", "0.1", 0)
+BAKKESMOD_PLUGIN(DribblePlugin, "Dribble plugin", "0.1", PLUGINTYPE_FREEPLAY)
 
 GameWrapper* gw;
 ConsoleWrapper* cons;
