@@ -24,8 +24,34 @@ void on_draw(CanvasWrapper cw) {
 	//cw.DrawString(to_string(projectedBounce.X) + "," + to_string(projectedBounce.Y) + "," + to_string(projectedBounce.Z));
 }
 
+
+
+void repeat_rebound() {
+	cons->log(to_string(cons->getCvarBool("rebound_repeat")));
+	cons->log(to_string(cons->getCvarFloat("rebound_delay", 10000)));
+	if (cons->getCvarBool("rebound_repeat")) {
+		if (gw->IsInTutorial()) {
+			cons->executeCommandNoLog("rebound_shoot");
+		}
+		gw->SetTimeout([](GameWrapper* gw) {
+			repeat_rebound();
+		}, cons->getCvarFloat("rebound_delay", 10000));
+	}
+}
+
 void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 	string command = params.at(0);
+
+	if (command.compare("rebound_repeat") == 0 && params.size() > 1)
+	{
+		bool shouldRepeat = !(params.at(1).compare("0") == 0);
+		if (shouldRepeat) {
+			gw->SetTimeout([](GameWrapper* gw) {
+				repeat_rebound();
+			}, 100); //execute after 100 ms so rebound_repeat is set
+		}
+	}
+
 	if (!gw->IsInTutorial())
 		return;
 
@@ -71,6 +97,7 @@ void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 		tw.GetBall().SetVelocity(shot);
 		tw.GetBall().SetAngularVelocity(addedSpin, true);
 	}
+	
 
 }
 
@@ -82,13 +109,21 @@ void ReboundPlugin::onLoad()
 	console->registerCvar("rebound_side_offset", "0");
 	console->registerCvar("rebound_addedspin", "0");
 	console->registerCvar("rebound_resetspin", "0");
+
+	console->registerCvar("rebound_delay", "(7000, 15000)");
+	console->registerCvar("rebound_repeat", "0");
+
+	
 	gw = gameWrapper;
 	cons = console;
+
 	console->registerNotifier("rebound_shoot", reboundplugin_ConsoleNotifier);
-	gw->RegisterDrawable(on_draw);
+	console->registerNotifier("rebound_repeat", reboundplugin_ConsoleNotifier);
+	//gw->RegisterDrawable(on_draw);
 }
 
 void ReboundPlugin::onUnload()
 {
 	console->unregisterNotifier("rebound_shoot", reboundplugin_ConsoleNotifier);
+	console->unregisterNotifier("rebound_repeat", reboundplugin_ConsoleNotifier);
 }
