@@ -167,11 +167,24 @@ void trainingplugin_ConsoleNotifier(std::vector<std::string> params)
 			CarWrapper car = tw.GetGameCar();
 			car.Stop();
 			car.SetLocation(mirror_it(s_data.get_player_start_location(), mirror));
-			car.SetVelocity(mirror_it(s_data.get_player_start_velocity(), mirror));
 			car.SetCarRotation(mirror_it(s_data.get_player_start_rotation(), mirror));
+			car.SetVelocity(mirror_it(s_data.get_player_start_velocity(), mirror));
 			if (!currentShot.getShot().options.script.empty()) {
 				cons->executeCommand(currentShot.getShot().options.script);
 			}
+			//gw->SetTimeout([&](GameWrapper* gw) {
+			//	if (!gw->IsInTutorial())
+			//		return;
+			//	TutorialWrapper tw = gw->GetGameEventAsTutorial();
+
+			//	if (tw.IsInFreePlay()) {
+			//		bool mirror = should_mirror();
+			//		CarWrapper car = tw.GetGameCar();
+			//		get_shot_data_from_console(&s_data);
+			//		
+			//	}
+			//}, 50.0f);
+
 			gw->SetTimeout([&](GameWrapper* gw) {
 				if (!gw->IsInTutorial())
 					return;

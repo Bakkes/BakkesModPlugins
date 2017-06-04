@@ -185,8 +185,8 @@ void JsonShot::set(GameWrapper* gw, ConsoleWrapper * cons)
 	cons->setCvar("shot_initial_player_location_z", p.location.z);
 
 	cons->setCvar("shot_initial_player_velocity_x", p.velocity.x);
-	cons->setCvar("shot_initial_player_velocity_y", p.velocity.x);
-	cons->setCvar("shot_initial_player_velocity_z", p.velocity.x);
+	cons->setCvar("shot_initial_player_velocity_y", p.velocity.y);
+	cons->setCvar("shot_initial_player_velocity_z", p.velocity.z);
 
 	cons->setCvar("shot_initial_player_rotation_pitch", p.rotation.pitch);
 	cons->setCvar("shot_initial_player_rotation_yaw", p.rotation.yaw);

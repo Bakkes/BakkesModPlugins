@@ -10,18 +10,30 @@ ConsoleWrapper* cons;
 Vector projectedBounce;
 
 void on_draw(CanvasWrapper cw) {
-	//Vector2 loc = cw.Project(projectedBounce - Vector(100, 0, 100));
+	//auto ball = gw->GetGameEventAsTutorial().GetBall();
+	//Vector ballLoc = ball.GetLocation();
+	//Vector2 loc = cw.Project(ballLoc - Vector(50, 0, 50));
 
-	//Vector2 loc2 = cw.Project(projectedBounce + Vector(100, 0, 100));
+	//Vector2 loc2 = cw.Project(ballLoc + Vector(50, 0, 50));
+
+	//Vector2 topLeft = loc.X > loc2.X ? loc : loc2;
+
 	//cw.SetPosition(loc);
 	//
-	//cw.SetColor(255, 0, 0, 255);
+	//cw.SetColor(255, 0, 0, 122);
 
 	//cw.DrawRect(loc, loc2);
 	//cw.FillBox({ loc2.X - loc.X, loc2.Y - loc.Y });
+	//cw.SetColor(122, 255, 0, 180);
+
+	//topLeft.X -= 30;
+	//cw.SetPosition(topLeft);
+
 	//cw.DrawString(to_string(loc.X) + "," + to_string(loc.Y));
-	//cw.SetPosition({ loc.X, loc.Y + 20 });
-	//cw.DrawString(to_string(projectedBounce.X) + "," + to_string(projectedBounce.Y) + "," + to_string(projectedBounce.Z));
+
+
+	//cw.SetPosition({ topLeft.X, topLeft.Y + 20 });
+	//cw.DrawString(to_string(ballLoc.X) + "," + to_string(ballLoc.Y) + "," + to_string(ballLoc.Z));
 }
 
 
