@@ -49,6 +49,7 @@ struct RotatorString {
 struct ball {
 	VectorString location;
 	VectorString velocity;
+	VectorString angvel; //not used atm
 	ball() {}
 };
 

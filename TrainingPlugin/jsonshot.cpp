@@ -39,6 +39,9 @@ ball parseJSONBall(json js) {
 	if (js.count("velocity") > 0) {
 		b.velocity = parseJSONVector(js["velocity"]);
 	}
+	if (js.count("torque") > 0) {
+		b.angvel = parseJSONVector(js["torque"]);
+	}
 	return b;
 }
 

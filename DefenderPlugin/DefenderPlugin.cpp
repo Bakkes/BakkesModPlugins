@@ -49,7 +49,7 @@ long long ExecuteNewShot() {
 		b.Stop();
 		return coolDown;
 	}
-	if (training.IsBallMovingTowardsGoal(destinationGoal)) {
+	if (training.IsBallMovingTowardsGoal(destinationGoal, b)) {
 		return 750;
 	}
 	if (touchTime != lastTouchTime)
