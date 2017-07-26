@@ -247,3 +247,4 @@ _Pvt_Extensions
 # JetBrains Rider
 .idea/
 *.sln.iml
+DefaultPlugins.VC.db
