@@ -99,13 +99,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Chris\Downloads\websocketpp-0.7.0\;C:\Users\Chris\Downloads\boost_1_61_0\;C:\Users\Chris\Documents\bakkesmod\BakkesMod\BakkesMod;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Downloads\websocketpp-0.7.0;K:\jul 2017 rest\Downloads\boost_1_61_0\;C:\Users\Chris\Documents\bakkesmod\BakkesMod\BakkesMod;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>IS_PLUGIN;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\Chris\Downloads\boost_1_61_0\stage\lib;C:\Users\Chris\Documents\bakkesmod\BakkesMod\Release;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>K:\jul 2017 rest\Downloads\boost_1_61_0\stage\lib;C:\Users\Chris\Documents\bakkesmod\BakkesMod\Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

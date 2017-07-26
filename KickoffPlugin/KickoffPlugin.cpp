@@ -151,19 +151,34 @@ void kickoffplugin_ConsoleNotifier(std::vector<std::string> params) {
 			cons->log("Something went wrong when creating a bot car");
 			return;
 		}
-		
+		ourCar.SetIsDriving(false);
 		botCar.Stop();
 		ourCar.Stop();
-		
-		init_kickoff(ourCar, 0, currentKickoff - 1);
-		init_kickoff(botCar, 1, currentKickoff - 1);
 		gw->SetTimeout([](GameWrapper* gw) {
 			auto sw = gw->GetGameEventAsServer();
 			auto ourCar = sw.GetPRICar(0);
 			auto botCar = sw.GetPRICar(1);
-			float defaultBoost = ourCar.GetBoost().GetStartBoostAmount;
+			botCar.Stop();
+			ourCar.Stop();
+		}, 10);
+
+		init_kickoff(ourCar, 0, currentKickoff - 1);
+		init_kickoff(botCar, 1, currentKickoff - 1);
+
+		gw->SetTimeout([](GameWrapper* gw) {
+			auto sw = gw->GetGameEventAsServer();
+			auto ourCar = sw.GetPRICar(0);
+			auto botCar = sw.GetPRICar(1);
+			float defaultBoost = ourCar.GetBoost().GetStartBoostAmount();
 			ourCar.GetBoost().SetBoostAmount(defaultBoost);
-			botCar.GetBoost().SetBoostAmount(defaultBoost);
+			if(!botCar.IsNull() && !botCar.GetBoost().IsNull())
+				botCar.GetBoost().SetBoostAmount(defaultBoost);
+
+			sw.SetCountdownTime(3);
+			sw.SetGameStateTime(3);
+			sw.ResetBalls();
+			sw.SetAllDriving(false);
+			sw.StartCountdown();
 		}, 100);
 	}
 }
