@@ -8,7 +8,6 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(log_overloads, ConsoleWrapper::log, 1, 2)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(set_angular_overloads, ActorWrapper::SetAngularVelocity, 1, 2);
 
 class Helpers {};
-#define REGISTER()
 
 BOOST_PYTHON_MODULE(bakkesmod)
 {

@@ -5,7 +5,12 @@
 
 const string PY_PATH = "./bakkesmod/py/";
 
-BAKKESMOD_PLUGIN(PythonPlugin, "Python plugin", "0.1", 0)
+
+#ifdef _AI_BUILD
+	BAKKESMOD_PLUGIN(PythonPlugin, "Python plugin", "0.1", PLUGINTYPE_BOTAI)
+#else
+	BAKKESMOD_PLUGIN(PythonPlugin, "Python plugin", "0.1", 0)
+#endif
 
 GameWrapper* gw;
 ConsoleWrapper* cons;
@@ -43,18 +48,38 @@ void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 			cons->log("Python threw error: " + err);
 		}
 	}
+#ifdef _AI_BUILD
 	else if (command.compare("py_ai") == 0) {
-		Py_Finalize();
-		Py_Initialize();
+		//Py_Finalize();
+		//Py_Initialize();
 		reinit_python();
-		PyRun_SimpleString("def on_tick(controller):\n"
-							"	controller.steer = 1\n");
 
+		if (params.size() < 2) {
+			cons->log("usage: " + command + " filename.py");
+			return;
+		}
+		string path = PY_PATH + params.at(1);
+		if (!file_exists(path) && !string_ends_with(path, ".py")) {
+			path += ".py";
+		}
+		if (!file_exists(path)) {
+			cons->log("Python script " + path + " does not exist!");
+			return;
+		}
+		try {
+			exec_file(str(path), main_namespace, main_namespace);
+		}
+		catch (const error_already_set&) {
+			string err = parse_python_exception();
+			cons->log("Python threw error: " + err);
+		}
 	}
+#endif
 }
 
 void reinit_python() {
 	try {
+		//main_namespace.clear()
 		main_module
 			= object(handle<>(borrowed(PyImport_AddModule("__main__"))));
 
@@ -74,14 +99,18 @@ void PythonPlugin::onLoad()
 	cons = console;
 	
 	cons->registerNotifier("py_exec", reboundplugin_ConsoleNotifier);
-	cons->registerNotifier("py_ai", reboundplugin_ConsoleNotifier);
 	cons->registerNotifier("py_load", reboundplugin_ConsoleNotifier);
+
+#ifdef _AI_BUILD
+	cons->registerNotifier("py_ai", reboundplugin_ConsoleNotifier);
+#endif
+
 	Py_Initialize();
 
 	
 	initbakkesmod();
 	reinit_python();
-
+	
 }
 
 void PythonPlugin::onUnload()
@@ -89,10 +118,22 @@ void PythonPlugin::onUnload()
 	Py_Finalize();
 }
 
+namespace boost {
+	namespace python {
+		bool hasattr(object o, const char* name) {
+			return PyObject_HasAttrString(o.ptr(), name);
+		}
+	}
+}
+#ifdef _AI_BUILD
 void PythonPlugin::on_tick(ControllerInput * input, CarWrapper * localCar, BallWrapper * ball)
 {
-	auto tick_func = main_namespace.attr("on_tick");
+	if (hasattr(main_module, "on_tick")) {
+		auto tick_func = main_module.attr("on_tick");
+		tick_func(ptr(input));
+	}
 }
+#endif
 
 std::string parse_python_exception() {
 	PyObject *type_ptr = NULL, *value_ptr = NULL, *traceback_ptr = NULL;
