@@ -20,6 +20,10 @@ extern void reinit_python();
 object main_module;
 dict main_namespace;
 
+dict global_namespace;
+dict local_namespace;
+
+
 void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 	string command = params.at(0);
 	if (!gw->IsInTutorial())
@@ -41,7 +45,7 @@ void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 		}
 
 		try {
-			exec_file(str(path), main_namespace, main_namespace);
+			exec_file(str(path), global_namespace, global_namespace);
 		}
 		catch (const error_already_set&) {
 			string err = parse_python_exception();
@@ -67,7 +71,7 @@ void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 			return;
 		}
 		try {
-			exec_file(str(path), main_namespace, main_namespace);
+			exec_file(str(path), global_namespace, global_namespace);
 		}
 		catch (const error_already_set&) {
 			string err = parse_python_exception();
@@ -79,13 +83,14 @@ void reboundplugin_ConsoleNotifier(std::vector<std::string> params) {
 
 void reinit_python() {
 	try {
-		//main_namespace.clear()
-		main_module
-			= object(handle<>(borrowed(PyImport_AddModule("__main__"))));
+		//global_namespace.clear();
+		//local_namespace.clear();
 
-		main_namespace = extract<dict>(main_module.attr("__dict__"));
-		main_namespace["console"] = boost::python::ptr(cons);
-		main_namespace["game_wrapper"] = boost::python::ptr(gw);
+		// Copy builtins to new global namespace
+		global_namespace = extract<dict>(main_module.attr("__dict__"));
+		//global_namespace["__builtins__"] = main_namespace["__builtins__"];
+		global_namespace["console"] = boost::python::ptr(cons);
+		global_namespace["game_wrapper"] = boost::python::ptr(gw);
 	}
 	catch (const error_already_set&) {
 		string err = parse_python_exception();
@@ -109,6 +114,12 @@ void PythonPlugin::onLoad()
 
 	
 	initbakkesmod();
+	main_module
+		= object(handle<>(borrowed(PyImport_AddModule("__main__"))));
+
+	main_namespace = extract<dict>(main_module.attr("__dict__"));
+	main_namespace["console"] = boost::python::ptr(cons);
+	main_namespace["game_wrapper"] = boost::python::ptr(gw);
 	reinit_python();
 	
 }
